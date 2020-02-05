@@ -1,0 +1,109 @@
+Ok, for the Felix Xmas 2019 issue, I thought about adapting the old
+Invicta Mastermind game (guessing a secret code of colours) into a
+non-interactive puzzle.  I started with the Mastermind game itself:
+
+01.playgame:
+
+contains the original (December 2000) Mastermind Game, written in ANSI C,
+using low level X-Windows (Xlib) graphics, in which the computer makes
+up a random secret code, and the human attempts to guess it.  This was in
+turn based on an earlier version written in Modula-2 in 1992 by me and
+my colleague Peter Cutler, using the same X-windows graphics library.
+
+To adapt this interactive game ("I guess X; that scores 2 blacks and
+2 whites", ok, I guess Y; that scores 3 blacks and 2 whites") into a
+non-interactive puzzle that could be printed in Felix, I wondered about
+finding a partial Mastermind game in which after N guesses and their
+scores, there would only be ONE consistent next guess - which would
+inevitably be the secret code.  I also wanted to find a SHORT partial
+Mastermind game, one with (say) only two or three prior guesses and
+their scores.
+
+02.genpuzzle:
+
+contains my freshly written program to find-a-partial-Mastermind-game-with
+a-single-next-guess.  See inside for more details of how to generate short
+Mastermind-as-puzzle games.
+
+After running 02.perl-puzzle/genpuzzle several times, the best
+Mastermind-as-puzzle game I found was:
+
+	shortest=3, secret=bybpr,
+	guesses=byprg,brbpg,bbypg,
+	scores=2-2, 3-1, 2-2
+
+i.e. guess Blue-Yellow-Pink-Red-Green first, which scores 2b+2w,
+then guess Blue-Red-Blue-Pink-Green second, which scores 3b+1w,
+then guess Blue-Blue-Yellow-Pink-Green third, which only scores 2b+2w.
+
+This game is summarised in     03.xmas-felix-puzzle
+
+The next step was, of course, to generate a pretty picture showing the
+xmas-felix-puzzle game.
+
+04.display-xmas-felix
+
+contains my attempts to do this.  The only easy way to do that was for me
+to adapt my original C game code, fixing the secret code as BYPRG, restricting
+the maximum number of guesses to 4, recompiling it and then manually entering
+the first 3 guesses.  The computer, knowing the secret code, automatically
+regenerated the scores and displayed them - of course I checked manually
+that they were correct.
+
+I then took a screenshot (felixpuzzle.ppm), converted it to a PNG and
+sent it to the good folks at Felix.  That was good enough at the time,
+but when it appeared in Felix it was disappointingly pixelated.  ie. the
+original game user interface was not high enough resolution.
+
+In order to explain the game fully, I came up with five simple 3-hole 3- and
+4- colour Mastermind puzzles, and 04.display-xmas-felix/5-simple-puzzles
+contains a LaTeX document describing the rules, incorporating screenshots
+of each puzzle.  The PDF of this document was installed in my personal
+web page, and the Felix writeup linked to that document.
+
+Over New Year, I happened to spent some time writing Postscript programs
+to solve several unrelated puzzles, so regained some familiarity with just
+how much of a full-blown programming language Postscript really is.
+
+Early in January, I suggested to the Felix puzzle team that we investigate
+setting more Mastermind-as-puzzle puzzles in future Felixes, and as a result
+I wondered how hard it would be to reproduce the original graphical game
+layout direct in Postscript, at the maximum possible resolution that
+Postscript can achieve:
+
+05.newdisplay
+
+contains my (successful) attempt to do this.  After building a series of
+debugging stages, and a depressingly large amount of time spent bludgening
+Postscript into shape, I got all the necessary functions ported into
+Postscript and working.  I then spent quite a bit of time making it simpler
+to display a particular made up puzzle.
+
+I ended up with a Perl script "makeps.pl" that parses the final line of
+02/genpuzzle/genpuzzle output and then generates a displayable Postscript
+image of that particular puzzle.
+
+Using "makeps.pl", one might generate, store and view [if "gv" is installed]
+a single Mastermind puzzle with 4 holes and 4 colours (RGBY) in eek.ps via:
+
+../02.genpuzzle/gen4-4 | ./makeps.pl eek
+
+and generate, store and view a puzzle with 5 holes and 5 colours (RGBYP) via:
+
+../02.genpuzzle/gen5-5 | ./makeps.pl eek
+
+The good4x4 and good5x5 directories contain several reasonably challenging
+puzzles.  Note that the secret code is embedded in the Postscript files
+as a comment, to see them all:
+
+grep Shhhhhhh good*/*.ps
+
+One thing that is still quite hard is to estimate how hard a particular
+Mastermind puzzle will be, i.e  the amount of time that a typical solver
+might take to solve it.  I don't think I can automate that:-)
+
+BTW, 05.newdisplay also contains good4x4 and good5x5 directories that
+contain a number of promising looking Mastermind-puzzles, that I think
+should be moderately interesting to solve.
+
+			Duncan C. White, Jan-Feb 2020

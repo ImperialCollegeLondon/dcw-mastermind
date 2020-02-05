@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+#
+#	inc: simple includer macro-processor.
+#		leaves all lines alone, EXCEPT
+#		for those of the form <<%include "filename">>
+#		which it processes.
+
+use strict;
+use warnings;
+use File::Slurp;
+use Data::Dumper;
+
+
+die "Usage: inc infile outfile\n" unless @ARGV==2;
+my $infilename = shift;
+my $outfilename = shift;
+
+
+#
+# include( $filename, $outfh );
+#	include the contents of filename, plus a couple of blank lines,
+#	into $outfh.  Doesn't support nested includes..
+#
+sub include
+{
+	my( $filename, $outfh ) = @_;
+	my $text = read_file( $filename );
+	die "include: can't open $filename\n" unless defined $text;
+	print $outfh "$text\n\n";
+}
+
+
+open( my $infh, '<', $infilename ) || die "inc: can't open $infilename\n";
+open( my $outfh, '>', $outfilename ) || die "inc: can't create $outfilename\n";
+
+while( <$infh> )
+{
+	if( /^%include\s+"([^"]+)"/ )
+	{
+		include( $1, $outfh );
+	} else
+	{
+		print $outfh $_;
+	}
+}
+
+close( $infh );
+close( $outfh );

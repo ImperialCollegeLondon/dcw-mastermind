@@ -1,0 +1,19 @@
+%
+% my $m = max( $n, $m );
+% 	Return the maximum of n and m
+%
+/max 
+{
+	3 dict begin	% next N items defined are in a local dictionary
+		/m exch def % localize parameter names
+		/n exch def
+		/result n def % local variable
+		
+		n m lt
+		{
+			/result m def 
+		} if
+		result 
+
+	end		% local dictionary destroyed here
+} def

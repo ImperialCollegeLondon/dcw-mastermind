@@ -1,0 +1,25 @@
+Once upon a time, there was a popular commercial game, marketed in the UK
+at least by Invicta, called Mastermind.  This was unrelated to the TV
+quiz with the black chair, specialist subjects etc etc.
+
+In this two player game, one player choses a secret code of colours (possibly
+repeated) such as Red-Green-Red-Blue-Yellow, while the other tries to guess
+that secret code of colours as quickly as possible.
+
+This directory contains my original (December 2000) version of the Mastermind
+Game, written in ISO C, using low level X-Windows (Xlib) graphics to present
+the user interface.
+
+Here, the computer chooses the secret code, while the human attempts
+to guess it.  Each go, the computer marks the human's guess against the
+secret code, awarding it a score made up of "B blacks and W whites":
+
+A black peg indicates that one of the guessed colours is exactly right (the
+right colour in the right position); but doesn't tell you which one.
+
+A white peg indicates that one of the guessed colours is contained in the
+secret code, but not in the correct position.
+
+The human's task is, of course, to guess the secret code as quickly as
+possible.  The best strategy involves finding a new guess that is
+consistent with all previous guesses and their scores.

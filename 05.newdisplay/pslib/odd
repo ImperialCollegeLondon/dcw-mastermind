@@ -1,0 +1,18 @@
+%
+% my $isodd = odd( $n );
+% 	Return 1 iff n is odd.  Works even if $n is a real, eg 7.0 is odd
+%
+/odd 
+{
+	2 dict begin	% next N items defined are in a local dictionary
+		/n      exch def	% localize parameter name
+		/result 0    def	% local variable
+
+		n cvi 2 mod 1 eq 
+		{
+			/result 1 def 
+		} if
+		result 
+
+	end		% local dictionary destroyed here
+} def

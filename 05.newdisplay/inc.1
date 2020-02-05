@@ -1,0 +1,35 @@
+.TH proto 1 "2/6/88"
+.SH NAME
+inc \- simple %include macro-processor
+
+.SH SYNOPSIS
+.B inc
+\fIinputfile\fP \fIoutputfile\fP
+
+.SH DESCRIPTION
+.I INC
+is an incredibly simple macro-processor.  It reads
+.I inputfile
+one line at a time, and copies most lines to
+.I outputfile
+unchanged.
+
+.P
+The only lines that are handled specially are of the form
+.B %include "filename"
+
+Include files are read and inserted at the appropriate place into the
+output, with two blank lines added after each file.  Note that include
+files may not themselves include other files.
+
+.SH OPTIONS
+
+NONE.
+
+.SH AUTHOR
+Duncan White,
+Dept of Computing,
+Imperial College London
+UK.
+.br
+Email: d.white@imperial.ac.uk

@@ -1,0 +1,14 @@
+% Set colour functions
+
+/black     { 0 0 0           setrgbcolor } def
+/white     { 1 1 1           setrgbcolor } def
+/blue      { 0 0 1           setrgbcolor } def
+/darkblue  { 0 0 0.55        setrgbcolor } def
+/red       { 1 0 0           setrgbcolor } def
+/green     { 0 1 0           setrgbcolor } def
+/yellow    { 1 1 0           setrgbcolor } def
+/purple    { 0.42 0.05 0.68  setrgbcolor } def
+/pink      { 1 0.71 0.75     setrgbcolor } def
+/steelblue { 0.27 0.52 0.82  setrgbcolor } def
+/cyan      { 0 1 1           setrgbcolor } def 
+/orange    { 1 0.64 0        setrgbcolor } def

@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+
+use FindBin qw($Bin);
+
+my $args = '-q';
+
+system( "$Bin/genpuzzle.pl $args 4 rgby 100" );

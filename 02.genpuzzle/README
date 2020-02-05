@@ -1,0 +1,39 @@
+This is an investigation into using the game of Mastermind
+as a puzzle: which means that we have to look for a series of
+N guesses and their scores AFTER WHICH there is EXACTLY ONE next
+guess that is consistent with all previous guesses and their
+scores.
+
+The "one next guess" is of course the secret code that the game exists
+to find.
+
+genpuzzle.pl does precisely that, with usage:
+
+./genpuzzle [--quiet] NHOLES COLOURS [NITERATIONS]
+
+eg. ./genpuzzle -q 4 RGBY 100
+
+would attempt to find the shortest (minimum length move sequence)
+of guesses and their scores (relative to a specific secret code),
+where each guess (and the secret code) is a 4-hole sequence of
+colours RGBY (possibly repeated), using 100 iterations.  The -q
+suppresses the display of the individual random puzzles found.
+
+As a convenience, the "4-hole RGBY" and "5-hole RGBYP" special
+cases are wrapped up into the utilities:
+
+./gen4-4
+./gen5-5
+
+each of them produce a single Mastermind puzzle as output, as in:
+
+./gen4-4
+holes=4, colours=rgby: shortest=2, secret=ggrr, shortest guesses=bgby,rggg, shortest scores=1-0,1-2
+
+./gen5-5
+holes=5, colours=rgbyp: shortest=2, secret=ppyyy, shortest guesses=rbbyg,yypyp, shortest scores=1-0,1-4
+
+(Of course gen5-5 is a lot slower as it involves 5-hole 5-colour codes,
+and a greater number of iterations).
+
+		Duncan White, Nov-Dec 2019
