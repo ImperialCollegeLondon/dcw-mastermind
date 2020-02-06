@@ -10,8 +10,8 @@ up a random secret code, and the human attempts to guess it.  This was in
 turn based on an earlier version written in Modula-2 in 1992 by me and
 my colleague Peter Cutler, using the same X-windows graphics library.
 
-To adapt this interactive game ("I guess X; that scores 2 blacks and
-2 whites", ok, I guess Y; that scores 3 blacks and 2 whites") into a
+To adapt this interactive game ("my first guess is X; that scores 2 blacks and
+2 whites", ok, my second guess is Y; that scores 3 blacks and 2 whites") into a
 non-interactive puzzle that could be printed in Felix, I wondered about
 finding a partial Mastermind game in which after N guesses and their
 scores, there would only be ONE consistent next guess - which would
