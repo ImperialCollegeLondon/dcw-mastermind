@@ -48,23 +48,27 @@ file just like debug8.inc (changing only the constants and the lists given
 to the board drawing function calls), which we run through inc, in order
 to generate displayable Postscript image of a particular puzzle.
 
+More recently, I extended makeps.pl to ALSO generate a slightly different
+.inc format file (and then convert it to Postscript and then EPS) that
+contains only the secret code.
+
+
 Using "makeps.pl", one might generate, store and view [if "gv" is installed]
-a single Mastermind puzzle with 4 holes and 4 colours (RGBY) in eek.ps via:
+a single Mastermind puzzle with 4 holes and 4 colours (RGBY) in good4x4/1.eps,
+and it's secret code in good4x4/1s.eps, via:
 
-../reverse-mastermind/gen4-4 | ./makeps.pl eek
+../02.genpuzzle/gen4-4 | ./makeps.pl good4x4/1
 
-and generate, store and view a puzzle with 5 holes and 5 colours (RGBYP) via:
+Similarly, to generate, store and view a puzzle with 5 holes and 5 colours
+(RGBYP), and it's corresponding secret code, use:
 
-../reverse-mastermind/gen5-5 | ./makeps.pl eek
+../02.genpuzzle/gen5-5 | ./makeps.pl good5x5/1
 
 The good4x4 and good5x5 directories contain several reasonably challenging
-puzzles.  Note that the secret code is embedded in the Postscript files
-as a comment, to see them all:
-
-grep Shhhhhhh good*/*.ps
+puzzles.  In those directories, X.eps is the game, and Xs.eps the secret code.
 
 One thing that is still quite hard is to estimate the hardness of a
 particular Mastermind puzzle, i.e. the amount of time that a typical solver
 might take to solve it.
 
-			Duncan C. White, Jan 2020
+			Duncan C. White, Jan-Feb 2020

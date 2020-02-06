@@ -80,8 +80,31 @@ Postscript and working.  I then spent quite a bit of time making it simpler
 to display a particular made up puzzle.
 
 I ended up with a Perl script "makeps.pl" that parses the final line of
-02/genpuzzle/genpuzzle output and then generates a displayable Postscript
-image of that particular puzzle.
+02/genpuzzle/genpuzzle output and then generates a displayable EPS image
+of that particular puzzle, and a separate EPS image of it's secret code.
+
+Using "makeps.pl", one might generate, store and view [if "gv" is installed]
+a single Mastermind puzzle with 4 holes and 4 colours (RGBY) in good4x4/1.eps,
+and it's secret code in good4x4/1s.eps, all via:
+
+../02.genpuzzle/gen4-4 | ./makeps.pl good4x4/1
+
+Similarly, to generate, store and view a puzzle with 5 holes and 5 colours
+(RGBYP) in good5x5/1.eps, and it's corresponding secret code in good5x5/1s.eps,
+just run:
+
+../02.genpuzzle/gen5-5 | ./makeps.pl good5x5/1
+
+The good4x4 and good5x5 directories contain several reasonably challenging
+puzzles.  In those directories, X.eps is the game, and Xs.eps the secret code,
+while X.ps is the pure-Postscript version of the game, and Xs.ps the
+pure-Postscript version of the secret code, and X.inc is the Postscript-with-
+includes version of the game, and Xs.inc the Postscript-with-includes version
+of the secret code.
+
+One thing that is still quite hard is to estimate the hardness of a
+particular Mastermind puzzle, i.e. the amount of time that a typical solver
+might take to solve it.
 
 Using "makeps.pl", one might generate, store and view [if "gv" is installed]
 a single Mastermind puzzle with 4 holes and 4 colours (RGBY) in eek.ps via:
@@ -92,18 +115,15 @@ and generate, store and view a puzzle with 5 holes and 5 colours (RGBYP) via:
 
 ../02.genpuzzle/gen5-5 | ./makeps.pl eek
 
-The good4x4 and good5x5 directories contain several reasonably challenging
-puzzles.  Note that the secret code is embedded in the Postscript files
-as a comment, to see them all:
+The 05.newdisplay/good4x4 and 05.newdisplay/good5x5 directories contain
+several reasonably challenging puzzles, that I think should be moderately
+interesting to solve.  Note that the secret code is embedded in the generated
+Postscript files as a comment. To see all the secret codes:
 
 grep Shhhhhhh good*/*.ps
 
 One thing that is still quite hard is to estimate how hard a particular
 Mastermind puzzle will be, i.e  the amount of time that a typical solver
 might take to solve it.  I don't think I can automate that:-)
-
-BTW, 05.newdisplay also contains good4x4 and good5x5 directories that
-contain a number of promising looking Mastermind-puzzles, that I think
-should be moderately interesting to solve.
 
 			Duncan C. White, Jan-Feb 2020

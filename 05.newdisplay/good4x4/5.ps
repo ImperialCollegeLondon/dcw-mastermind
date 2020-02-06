@@ -1,0 +1,571 @@
+%!PS-Adobe-3.0
+%%Pages: 1
+%%EndComments
+
+<< /PageSize [595 842] >> setpagedevice
+
+% w = fontwidth( string );
+%	find the width of $string in the current font
+/fontwidth
+{
+        stringwidth
+	pop
+} bind def
+
+
+% h = fontheight();
+%	find the font height of the current font
+/fontheight
+{
+    gsave                                  % save graphic context
+    {
+        100 100 moveto                     % move to some point
+        (HIpg) true charpath pathbbox      % gets text path bounding box (LLx LLy URx URy)
+        exch pop 3 -1 roll pop             % keeps LLy and URy
+        exch sub                           % URy - LLy
+    }
+    stopped                                % did the last block fail?
+    {
+        pop pop                            % get rid of "stopped" junk
+        currentfont /FontMatrix get 3 get  % gets alternative text height
+    }
+    if
+    grestore                               % restore graphic context
+} bind def
+
+
+%
+% my $isodd = odd( $n );
+% 	Return 1 iff n is odd.  Works even if $n is a real, eg 7.0 is odd
+%
+/odd 
+{
+	2 dict begin	% next N items defined are in a local dictionary
+		/n      exch def	% localize parameter name
+		/result 0    def	% local variable
+
+		n cvi 2 mod 1 eq 
+		{
+			/result 1 def 
+		} if
+		result 
+
+	end		% local dictionary destroyed here
+} def
+
+
+%
+% my $m = max( $n, $m );
+% 	Return the maximum of n and m
+%
+/max 
+{
+	3 dict begin	% next N items defined are in a local dictionary
+		/m exch def % localize parameter names
+		/n exch def
+		/result n def % local variable
+		
+		n m lt
+		{
+			/result m def 
+		} if
+		result 
+
+	end		% local dictionary destroyed here
+} def
+
+
+% Set colour functions
+
+/black     { 0 0 0           setrgbcolor } def
+/white     { 1 1 1           setrgbcolor } def
+/blue      { 0 0 1           setrgbcolor } def
+/darkblue  { 0 0 0.55        setrgbcolor } def
+/red       { 1 0 0           setrgbcolor } def
+/green     { 0 1 0           setrgbcolor } def
+/yellow    { 1 1 0           setrgbcolor } def
+/purple    { 0.42 0.05 0.68  setrgbcolor } def
+/pink      { 1 0.71 0.75     setrgbcolor } def
+/steelblue { 0.27 0.52 0.82  setrgbcolor } def
+/cyan      { 0 1 1           setrgbcolor } def 
+/orange    { 1 0.64 0        setrgbcolor } def
+
+
+
+
+% Shhhhhhhhh! The secret code is RRYR
+
+/maxguesses 3  def
+/numholes   4  def
+
+/g1 (YGBR) def
+/b1 1 def
+/w1 1 def
+
+
+/g2 (YYRY) def
+/b2 0 def
+/w2 2 def
+
+
+
+
+%
+% setcolour( $col );
+%
+/setcolour
+{
+	1 dict begin	% next N items defined are in a local dictionary
+		/col exch def % localize parameter name, removing it from stack
+		
+		col  (B)  eq { darkblue } if
+		col  (R)  eq { red } if
+		col  (G)  eq { green } if
+		col  (Y)  eq { yellow } if
+		col  (P)  eq { pink } if
+		col  (C)  eq { cyan } if
+		col  (O)  eq { orange } if
+		col  (W)  eq { white } if
+		col  (SB) eq { steelblue } if
+
+	end		% local dictionary destroyed here
+} def
+
+
+%
+% sethighlightcolour( $ch );
+%
+/sethighlightcolour
+{
+	1 dict begin	% next N items defined are in a local dictionary
+		/ch exch def % localize parameter name, removing it from stack
+
+		ch (B) eq
+		{
+			white
+		}
+		{
+			black
+		} ifelse
+
+	end		% local dictionary destroyed here
+} def
+
+
+%
+% blackorwhite( $isblack );
+%
+/blackorwhite
+{
+	1 dict begin	% next N items defined are in a local dictionary
+		/isblack exch def % localize parameter name
+
+		isblack 1 eq
+		{
+			black
+		}
+		{
+			white
+		} ifelse
+
+	end		% local dictionary destroyed here
+} def
+
+
+% rectpath( x, y, w, h )
+%	Draw a rectangle path with top right corner at (x,y),
+%	width w and height h
+/rectpath
+{
+	4 dict begin	% next N items defined are in a local dictionary
+		/h exch def % localize parameter name, removing it from stack
+		/w exch def % localize parameter name, removing it from stack
+		/y exch def % localize parameter name, removing it from stack
+		/x exch def % localize parameter name, removing it from stack
+
+		newpath
+		  x y moveto
+		  w 0 rlineto
+		  0 h rlineto
+		  w neg 0 rlineto
+		  0 h neg rlineto
+		closepath
+
+	end		% local dictionary destroyed here
+} def
+
+
+% fillrect( x, y, w, h )
+%	Fill a rectangle with top right corner at (x,y), width w
+%	and height h, in the current colour
+%
+/fillrect
+{
+	4 dict begin	% next N items defined are in a local dictionary
+		/h exch def % localize parameter name, removing it from stack
+		/w exch def % localize parameter name, removing it from stack
+		/y exch def % localize parameter name, removing it from stack
+		/x exch def % localize parameter name, removing it from stack
+
+		x y w h rectpath
+		fill
+
+	end		% local dictionary destroyed here
+} def
+
+
+% fillrectblue( x, y, w, h )
+%	Fill a rectangle with top left corner at (x,y), width w
+%	and height h, in steelblue, with a black edge
+%
+/fillrectblue
+{
+	4 dict begin	% next N items defined are in a local dictionary
+		/h exch def % localize parameter name, removing it from stack
+		/w exch def % localize parameter name, removing it from stack
+		/y exch def % localize parameter name, removing it from stack
+		/x exch def % localize parameter name, removing it from stack
+
+		x y w h rectpath
+
+		gsave
+		steelblue fill
+
+		grestore
+		black stroke
+
+	end		% local dictionary destroyed here
+} def
+
+
+/texth      12  def
+/vg         5   def
+/gap        10  def
+/guesshg    13  def
+/innerg     7   def
+/outerg     2   def
+/diam       2 innerg mul texth add   def
+/radius     diam 2 div   def
+/vscale     diam vg add   def
+/numw       30   def
+/numx       36   def
+/numy       40   def
+/guessx     numx numw gap add add   def
+/guessy     numy   def
+/guessw     diam guesshg add numholes mul guesshg add   def
+/scorehg    6   def
+/pegh       diam 5 sub   def
+/pegw       diam 2.5 div  def
+/thickness  pegw 4 div 2 max   def
+
+pegw odd thickness odd ne
+{
+	/thickness thickness 1  add def
+} if
+
+/scorex     guessx guessw gap add add  def
+/scorey     numy  def
+/scorew     pegw scorehg add numholes mul scorehg add  def
+/totalw     gap 4 mul numw guessw scorew add add add  def
+/totalh     vscale maxguesses mul vg add  def
+
+
+% shownumbers( $n );
+%	show the numbers box with all $n numbers (1..$n)
+%
+/shownumbers
+{
+	numx numy numw totalh fillrectblue
+
+	5 dict begin	% next N items defined are in a local dictionary
+		/n exch def % localize parameter name, removing it from stack
+		/i 0 def	% local variable
+		/w 0 def	% local variable
+		/x 0 def	% local variable
+		/y 0 def	% local variable
+
+		% for i = 1 to n
+		1 1 n
+		{
+			/i exch def
+
+			%w = fontwidth( i );
+			i 5 string cvs
+			fontwidth
+			/w exch def
+
+			% x = numx + (numw-w)/2
+			/x numw w sub 2 div numx add def
+
+			% y = numy + vscale * (n-i) + vg + (diam-texth)/2
+			/y vscale n i sub mul vg add
+				diam texth sub 2 div add numy add def
+
+			%(i:) [i (, w:) w (, x:) x (, y:) y ()] debugsay
+
+			%black
+			%newpath
+			%	x y moveto
+			%	2 0 rlineto
+			%	0 2 rlineto
+			%	-2 0 rlineto
+			%	0 -2 rlineto
+			%closepath
+			%stroke
+
+			white
+			x y moveto
+			i 5 string cvs show
+
+		} for
+	end
+} def
+
+
+% showguess( gn, guess )
+%	show a single guess, guess number gn
+%
+/showguess
+{
+	6 dict begin	% next N items defined are in a local dictionary
+		/guess exch def 	% localize parameter name
+		/gn exch def    	% localize parameter name
+		/i 0 def		% local variable
+		/ch 0 def		% local variable
+		/x 0 def		% local variable
+		/y 0 def		% local variable
+		/off 0 def		% local variable
+
+		%(showguess: gn=) [ gn (, guess=) guess () ] debugsay
+
+		% y = guessy + vg + vscale * ( maxguesses - gn ) + radius;
+		maxguesses gn sub vscale mul vg add radius add guessy add
+			/y exch def
+
+		/off radius 2 div 2 sub def
+
+		% for i = 1 to numholes
+		1 1 numholes
+		{
+			/i exch def
+
+			% ch = substr(guess,i-1,1)
+			guess i 1 sub 1 getinterval /ch exch def
+
+			% x = guessx + radius + guesshg + (diam+guesshg) * (i-1);
+			guesshg diam add i 1 sub mul guesshg add
+				guessx add radius add /x exch def
+
+			%% say "x:$x, y:$y, i:$i, ch:$ch";
+			%(x:) [ x (, y:) y (, i:) i (, ch:) ch () ] debugsay
+
+			%black
+			%newpath
+			%	x y moveto
+			%	2 0 rlineto
+			%	0 2 rlineto
+			%	-2 0 rlineto
+			%	0 -2 rlineto
+
+			ch ( ) eq
+			{
+				white
+				x y moveto
+				x y 2 0 360 arc
+				closepath
+				fill
+			}
+			{
+				ch sethighlightcolour
+				x y moveto
+				x y radius 0 360 arc
+				closepath
+				fill
+
+				ch setcolour
+				x y radius 1 sub 0 360 arc
+				closepath
+				fill
+
+				ch sethighlightcolour
+				%x radius sub y radius sub moveto
+				x off sub y off sub moveto
+				ch show
+			} ifelse
+		} for
+	end
+} def
+
+
+% showguesses( gs[] );
+%	show all the guesses in gs array
+%
+/showguesses
+{
+	3 dict begin	% next N items defined are in a local dictionary
+		/guesses exch def 	% localize parameter name
+		/gn 1 def		% local variable
+		/guess 0 def		% local variable
+
+		guessx guessy guessw totalh fillrectblue
+
+		% foreach guess in guesses array
+		guesses
+		{
+			/guess exch def
+
+			% say "gn:$gn, guess:$guess";
+			%(gn:) [ gn (, guess:) guess () ] debugsay
+
+			% showguess( gn, guess )
+			gn guess showguess
+
+			gn 1 add /gn exch def
+		} forall
+
+	end
+} def
+
+
+% showpeg( isblack, row, column );
+%        show a score peg at row $row, column $column,
+%        either in black if $isblack is true, or white otherwise.
+%
+/showpeg
+{
+	6 dict begin	% next N items defined are in a local dictionary
+		/column  exch def % localize parameters
+		/row     exch def
+		/isblack exch def
+		/x       0    def % local variables
+		/y       0    def
+		/x1      0    def
+		/t       0    def
+
+		% say "showpeg: isblack:$isblack, row:$row, column:$column";
+		%(showpeg: isblack:) [ isblack (, row:) row (, column:) column () ] debugsay
+
+       		% x = scorex + scorehg + (pegw + scorehg) * column;
+		/x pegw scorehg add column mul scorex add scorehg add  def
+
+	        % y = scorey + vscale * ( maxguesses + 1 - row ) - vg;
+		/y maxguesses 1 add row sub vscale mul scorey add vg sub def
+
+		% x1 = x + (pegw - thickness) / 2;
+		/x1 pegw thickness sub 2 div x add def
+
+		% t = thickness - 1;
+		/t thickness 1 sub def
+
+		% blackorwhite( $isblack );
+		isblack blackorwhite
+
+		% fillrect( x, y, pegw-1, thickness );
+		x y pegw 1 sub thickness fillrect
+
+		% fillrect( x1, y, thickness, -pegh );
+		x1 y thickness pegh neg fillrect
+
+	end		% local dictionary destroyed here
+
+} def
+
+
+% showscore( $sn, $b, $w );
+%	Show the $sn'th score ($b blacks and $w whites)
+%
+/showscore
+{
+	6 dict begin	% next N items defined are in a local dictionary
+		/w exch def 	% localize parameter name
+		/b exch def
+		/sn exch def
+		/i  0    def	% local variables
+		/j  0    def
+
+	%for i = 0 to b-1
+	0 1 b 1 sub
+	{
+		/i exch def
+
+		%showpeg( 1, sn, j );
+		1 sn j showpeg
+
+		% j++;
+		j 1 add /j exch def
+
+	} for
+
+	%for i = 0 to w-1
+	0 1 w 1 sub
+	{
+		/i exch def
+
+		% showpeg( 0, sn, j );
+		0 sn j showpeg
+
+		% j++;
+		j 1 add /j exch def
+	} for
+
+} def
+
+
+% showscores( scores[] );
+%	show all the (B,W) pairs in scores[] array
+/showscores
+{
+	4 dict begin	% next N items defined are in a local dictionary
+		/scores exch def 	% localize parameter name
+		/sn 0 def		% local variable
+		/b 0 def		% local variable
+		/w 0 def		% local variable
+
+		scorex scorey scorew totalh fillrectblue
+
+		/sn 1 def
+
+		% foreach (b,w) pair in scores array
+		% - for pos = 0 to $#array step 2
+		0 2 scores length 1 sub
+		{
+			/pos exch def
+			% (pos) pos debugnv
+
+			% - $b = $scores[$pos];
+			/b scores pos get def
+
+			% - $w = $scores[$pos+1];
+			/w scores pos 1 add get def
+
+			%% say "sn:$sn, pos:$pos, b:$b, w:$w";
+			%(sn:) [ sn (, pos:) pos (, b:) b (, w:) w () ] debugsay
+
+			% showscore( sn, b, w )
+			sn b w showscore
+
+			% sn++
+			sn 1 add /sn exch def
+		} for
+
+	end
+} def
+
+
+
+%%Page: 1 1
+%%PageOrientation: Portrait
+
+/Helvetica-Bold findfont 13 scalefont setfont
+
+/texth fontheight def
+
+
+maxguesses shownumbers
+
+[ g1 g2 (     ) ]    showguesses
+
+[ b1 w1 b2 w2 ]    showscores
+
+
+showpage
