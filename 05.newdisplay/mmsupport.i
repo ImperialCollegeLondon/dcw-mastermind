@@ -257,9 +257,14 @@ pegw odd thickness odd ne
 
 			ch ( ) eq
 			{
-				white
+				black
 				x y moveto
-				x y 2 0 360 arc
+				x y radius 0 360 arc
+				closepath
+				fill
+
+				white
+				x y radius 1 sub 0 360 arc
 				closepath
 				fill
 			}
