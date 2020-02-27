@@ -3,10 +3,12 @@
 #	makeps: 	Reads the output of the 02.genpuzzle/genpuzzle program
 #			specifically the final line, of the form
 #	"holes=4, colours=rgby: shortest=2, secret=bgrb, shortest guesses=grbb,rbgb, shortest scores=1-3,1-3"
-#			and generates an Encapsulated Postscript image
-#			for that precise case (via several intermediate forms)..
-#			and, now, a second Encapsulated Postscript image
-#			showing the secret code for the same case.
+#			and generates 3 Encapsulated Postscript files:
+#			- one showing the puzzle
+#			- a second showing the secret code
+#			and now:
+#			- a third Encapsulated Postscript image showing
+#			  the available colours
 
 
 use strict;
@@ -179,7 +181,32 @@ qq(
 
 	my $calls =
 qq(
-[ secret ]    showguesses
+[ secret ] showguesses
+);
+
+	my $epsfile = write_inc_file( $basename, $defns, $calls );
+
+	return $epsfile;
+}
+
+
+#
+# my $epsfile = makecolours( $basename, $cols );
+#	Write out the $basename.inc postscript-with-includes file
+#	that will show the available colours, then convert it to EPS
+#	and return the filename of the EPS file.
+#
+fun makecolours( $basename, $cols )
+{
+	my $defns =
+qq(
+/maxguesses 1  def
+/numholes   $ncolours  def
+);
+
+	my $calls =
+qq(
+1 ($cols) showguess
 );
 
 	my $epsfile = write_inc_file( $basename, $defns, $calls );
@@ -194,4 +221,6 @@ system( "gv $epsfile &" );
 my $sepsfile = makesecret( $basename.'s' );
 system( "gv -geom +600+10 $sepsfile &" );
 
-say "generated $epsfile and $sepsfile";
+my $colepsfile = makecolours( $basename.'cols', $colours );
+
+say "generated $epsfile, $sepsfile and $colepsfile";
