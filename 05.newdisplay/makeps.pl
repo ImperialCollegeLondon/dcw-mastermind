@@ -132,6 +132,7 @@ qq(/g$gno ($g) def
 	}
 
 	my $gstr = join( " ", map { "g$_" } 1..$ng );
+	push @sc, "$nholes 0";
 	my $bwstr = join( " ", @sc );
 	my $gbwstr = join( "\n", @gbw );
 
